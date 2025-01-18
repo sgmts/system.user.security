@@ -12,13 +12,14 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512); // Chave segura gerada automaticamente
+    private static final String SECRET = "minhaChaveSuperSecretaDeNoMinimo32Caracteres";
+    private static final Key SECRET_KEY = Keys.hmacShaKeyFor(SECRET.getBytes());
     private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 10; // 10 horas
-
     // Gera o token JWT
-    public String generateToken(String email) {
+    public String generateToken(String email,String role) {
         return Jwts.builder()
                 .setSubject(email)
+                .claim("role", role) // Inclui o papel correto
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SECRET_KEY)

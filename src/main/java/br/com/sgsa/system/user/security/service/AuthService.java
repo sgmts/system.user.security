@@ -35,7 +35,7 @@ public class AuthService {
             throw new BadCredentialsException("Credenciais inválidas");
         }
 
-        // Gera o token JWT
-        return jwtUtil.generateToken(user.getEmail());
+        // Gera o token JWT incluindo o papel do usuário
+        return jwtUtil.generateToken(user.getEmail(), user.getRole().name());
     }
 }

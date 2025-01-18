@@ -26,7 +26,7 @@ public class User {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private Role role = Role.ROLE_USER; // Padrão: Usuário comum
+    private Role role = Role.USER; // Padrão: Usuário comum
 
     // Getters e Setters
     public Long getId() {
@@ -59,5 +59,13 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }
