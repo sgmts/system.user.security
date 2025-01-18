@@ -40,9 +40,4 @@ public class AuthController {
         return ResponseEntity.ok(new JwtResponseDTO(token));
     }
 
-    @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
-    }
 }
