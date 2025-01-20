@@ -44,15 +44,44 @@ Uma API REST robusta construída com Spring Boot para gerenciar usuários, com a
 ---
 ## Estrutura do Projeto
 ```
-src/main/java/com/example/usermanagement
+src/main/java/br/com/sgsa/system/user/security
 ├── controller   # Controladores REST
+├── dto          # Classes DTO (LoginRequestDTO, JwtResponseDTO)
+├── filter       # Filtros JWT para autenticação
 ├── model        # Entidades (User, Role)
 ├── repository   # Repositórios JPA
 ├── service      # Lógica de negócios
+│   └── impl     # Implementações dos serviços
 ├── security     # Configuração de Spring Security e JWT
+├── util         # Classes utilitárias (JwtUtil)
 └── Application.java # Ponto de entrada principal
 ```
 ---
+## 🔑Configuração de Autenticação
+### Gerar Token (Login)
+Envie uma requisição POST para /api/auth/login com as credenciais de um usuário:
+```
+{
+    "email": "admin@email.com",
+    "password": "senha123"
+}
+```
+- Resposta
+```
+{
+    "token": "eyJhbGciOiJIUzUxMiJ9...",
+    "type": "Bearer"
+}
+
+```
+
+### Uso do Token nos Endpoints Protegidos
+Adicione o cabeçalho **Authorization** em cada requisição:
+
+``
+Authorization: Bearer <seu-token-jwt>
+``
+
 ## Padrão de Commits
 Adotamos o [padrão Conventional Commits](https://www.conventionalcommits.org/pt-br/v1.0.0/) para organizar o histórico do projeto. Use os seguintes prefixos para seus commits:
 - `feat`: Adiciona uma nova funcionalidade. 
