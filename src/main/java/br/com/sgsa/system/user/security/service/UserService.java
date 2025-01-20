@@ -15,4 +15,6 @@ public interface UserService {
     User registerUser(User user);
 
     void deteleUserById(Long id);
+
+    void updateUser(Long id, User user);
 }

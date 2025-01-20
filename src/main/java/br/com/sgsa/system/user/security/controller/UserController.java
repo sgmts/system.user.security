@@ -9,6 +9,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,6 +45,18 @@ public class UserController {
 
         try {
             userService.deteleUserById(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NoSuchElementException nsee) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<User> updateUserById(@PathVariable Long id, @RequestBody User user) {
+
+        try {
+            userService.updateUser(id, user);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (NoSuchElementException nsee) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
