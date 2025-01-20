@@ -13,4 +13,6 @@ public interface UserService {
     Optional<User> getUserById(Long id);
 
     User registerUser(User user);
+
+    void deteleUserById(Long id);
 }
