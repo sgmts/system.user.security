@@ -11,11 +11,11 @@ public interface UserService {
 
     List<UserDTO> getAllUsers();
 
-    Optional<User> getUserById(Long id);
+    Optional<UserDTO> getUserById(Long id);
 
     UserDTO registerUser(UserDTO user);
 
     void deteleUserById(Long id);
 
-    void updateUser(Long id, User user);
+    void updateUser(Long id, UserDTO userDTO);
 }

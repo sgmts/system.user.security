@@ -1,7 +1,6 @@
 package br.com.sgsa.system.user.security.controller;
 
 import br.com.sgsa.system.user.security.dto.UserDTO;
-import br.com.sgsa.system.user.security.model.User;
 import br.com.sgsa.system.user.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -34,7 +33,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Optional<User>> getUserById(@PathVariable Long id) {
+    public ResponseEntity<Optional<UserDTO>> getUserById(@PathVariable Long id) {
 
         var usuarioSolicitado = userService.getUserById(id);
         return new ResponseEntity<>(usuarioSolicitado, HttpStatus.OK);
@@ -42,7 +41,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Optional<User>> deleteUserById(@PathVariable Long id) {
+    public ResponseEntity<HttpStatus> deleteUserById(@PathVariable Long id) {
 
         try {
             userService.deteleUserById(id);
@@ -54,10 +53,10 @@ public class UserController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<User> updateUserById(@PathVariable Long id, @RequestBody User user) {
+    public ResponseEntity<UserDTO> updateUserById(@PathVariable Long id, @RequestBody UserDTO userDTO) {
 
         try {
-            userService.updateUser(id, user);
+            userService.updateUser(id, userDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (NoSuchElementException nsee) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

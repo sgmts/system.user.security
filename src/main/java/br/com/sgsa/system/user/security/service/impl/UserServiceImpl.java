@@ -54,21 +54,25 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);
+    public Optional<UserDTO> getUserById(Long id) {
+
+        Optional<User> requestedUser = userRepository.findById(id);
+
+        return userMapper.mapModelToDTOOptional(requestedUser);
     }
 
     public void deteleUserById(Long id) {
         userRepository.deleteById(id);
     }
 
-    public void updateUser(Long id, User user) {
+    public void updateUser(Long id, UserDTO newUser) {
+
         // Busca o usuário existente no banco
         User userUpdated = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado com ID: " + id));
 
         // Verifica se o e-mail já está cadastrado em outro registro
-        userRepository.findByEmail(user.getEmail())
+        userRepository.findByEmail(newUser.getEmail())
                 .ifPresent(existingUser -> {
                     if (!existingUser.getId().equals(id)) {
                         throw new IllegalArgumentException("E-mail já cadastrado.");
@@ -76,10 +80,10 @@ public class UserServiceImpl implements UserService {
                 });
 
         // Atualiza os campos do usuário
-        userUpdated.setName(user.getName());
-        userUpdated.setEmail(user.getEmail());
-        userUpdated.setPassword(passwordEncoder.encode(user.getPassword()));
-        userUpdated.setRole(user.getRole());
+        userUpdated.setName(newUser.getName());
+        userUpdated.setEmail(newUser.getEmail());
+        userUpdated.setPassword(passwordEncoder.encode(newUser.getPassword()));
+        userUpdated.setRole(newUser.getRole());
 
         // Salva o usuário atualizado
         userRepository.save(userUpdated);
