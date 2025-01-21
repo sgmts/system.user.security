@@ -1,5 +1,6 @@
 package br.com.sgsa.system.user.security.controller;
 
+import br.com.sgsa.system.user.security.dto.UserDTO;
 import br.com.sgsa.system.user.security.model.User;
 import br.com.sgsa.system.user.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class UserController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public List<User> getAllUsers() {
+    public List<UserDTO> getAllUsers() {
         return userService.getAllUsers();
     }
 

@@ -1,16 +1,21 @@
 package br.com.sgsa.system.user.security.service.impl;
 
+import br.com.sgsa.system.user.security.dto.UserDTO;
+import br.com.sgsa.system.user.security.mapper.UserMapper;
 import br.com.sgsa.system.user.security.model.User;
 import br.com.sgsa.system.user.security.repository.UserRepository;
 import br.com.sgsa.system.user.security.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
@@ -18,7 +23,13 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User registerUser(User user) {
+    @Autowired
+    private UserMapper userMapper;
+
+    public UserDTO registerUser(UserDTO userDTO) {
+
+        User user = userMapper.mapDTOToModel(userDTO);
+
         // Verifica se o e-mail já está cadastrado
         if (userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new IllegalArgumentException("E-mail já cadastrado.");
@@ -28,11 +39,19 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         // Salva o usuário no banco de dados
-        return userRepository.save(user);
+
+        userRepository.save(user);
+        return userMapper.mapModelToDTO(user);
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDTO> getAllUsers() {
+
+        List<User> userList = userRepository.findAll();
+
+        // Usando o UsuarioMapper para converter a lista
+        return userList.stream()
+                .map(userMapper::mapModelToDTO)
+                .collect(Collectors.toList());
     }
 
     public Optional<User> getUserById(Long id) {
